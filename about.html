@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact me — Nada Hodali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=16" />
+<script src="sketch.js?v=7" defer></script>
+</head>
+<body>
+
+  <span class="corner-mark" aria-hidden="true"></span>
+
+  <header class="site-header">
+    <span class="header-left">ENGLISH &mdash; ARABIC</span>
+    <nav class="header-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="translations.html">Translations</a>
+      <a href="about.html" aria-current="page">Contact me</a>
+    </nav>
+    <span class="header-right">
+      <a class="header-logo-link" href="index.html" aria-label="Nada Hodali &mdash; home">
+        <img class="header-logo" src="assets/nada-logo-colored.png" alt="Nada Hodali &mdash; Translations" width="358" height="132" />
+      </a>
+    </span>
+  </header>
+
+  <main>
+    <section class="hero contact">
+      <h1 class="hero-statement">
+        Let&rsquo;s work
+        <span class="sketch--highlight" data-sketch="highlight">together</span>
+      </h1>
+
+      <div class="contact-grid">
+        <div class="contact-intro">
+          <p class="contact-lead">
+            For translation commissions, sample excerpts, workshops, or
+            <span class="sketch" data-sketch="underline">rights inquiries</span> &mdash;
+            send a note below and I&rsquo;ll reply by email.
+          </p>
+          <dl class="contact-meta">
+            <div>
+              <dt>Direct</dt>
+              <dd><a href="mailto:nadahodali@hotmail.com">nadahodali@hotmail.com</a></dd>
+            </div>
+            <div>
+              <dt>Elsewhere</dt>
+              <dd>
+                <a href="https://www.linkedin.com/in/nada-hodali-aa5a83170/" target="_blank" rel="noopener">LinkedIn</a>,
+                <a href="https://x.com/NHodali99" target="_blank" rel="noopener">X</a>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <form class="contact-form" id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+          <!-- Web3Forms: paste the access key emailed to you from web3forms.com -->
+          <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY" />
+          <input type="hidden" name="subject" value="New message from your website" />
+          <input type="hidden" name="from_name" value="nadahodali.com contact form" />
+
+          <label class="contact-hp" aria-hidden="true">
+            Leave this field empty
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" />
+          </label>
+
+          <div class="field">
+            <label for="cf-name">Name</label>
+            <input id="cf-name" name="name" type="text" required autocomplete="name" />
+          </div>
+
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input id="cf-email" name="email" type="email" required autocomplete="email" />
+          </div>
+
+          <div class="field">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" rows="6" required></textarea>
+          </div>
+
+          <button type="submit" class="contact-submit">Send message</button>
+          <p class="contact-status" id="contact-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <p class="footer-name"><span class="sketch" data-sketch="underline">Nada Hodali</span></p>
+      <p class="footer-rights">All rights reserved &copy; 2026</p>
+    </div>
+    <figure class="footer-card">
+      <img src="assets/business card nada no background.png" alt="Nada Hodali &mdash; business card" />
+    </figure>
+    <div class="footer-contact">
+      <p class="footer-kicker"><a href="about.html">Inquiries</a></p>
+      <p class="footer-email"><a href="mailto:nadahodali@hotmail.com">nadahodali@hotmail.com</a></p>
+      <p class="footer-social">
+        <a href="https://www.linkedin.com/in/nada-hodali-aa5a83170/" target="_blank" rel="noopener">LinkedIn</a> /
+        <a href="https://x.com/NHodali99" target="_blank" rel="noopener">X</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var form = document.getElementById("contact-form");
+      if (!form) return;
+
+      var status = document.getElementById("contact-status");
+      var button = form.querySelector(".contact-submit");
+
+      function setStatus(message, isError) {
+        status.textContent = message;
+        status.classList.add("is-visible");
+        status.classList.toggle("is-error", !!isError);
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        button.disabled = true;
+        setStatus("Sending…", false);
+
+        fetch(form.action, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(form)
+        })
+          .then(function (response) { return response.json(); })
+          .then(function (data) {
+            if (data.success) {
+              form.reset();
+              setStatus("Thank you — your message is on its way. I’ll be in touch soon.", false);
+            } else {
+              setStatus(data.message || "Something went wrong. Please email me directly at nadahodali@hotmail.com.", true);
+            }
+          })
+          .catch(function () {
+            setStatus("Network error. Please email me directly at nadahodali@hotmail.com.", true);
+          })
+          .finally(function () { button.disabled = false; });
+      });
+    })();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Translations — Nada Hodali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css?v=13" />
+<style class="translations-page">
+  /* translations.html only — makes the library fill the space under the header */
+  html { height: 100%; }
+  body {
+    min-height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  main {
+    flex: 1 1 auto;
+    display: flex;
+    min-height: 0;      /* lets the iframe shrink correctly inside flex */
+  }
+  .library-frame {
+    flex: 1 1 auto;
+    width: 100%;
+    border: 0;
+    display: block;
+    background: #eee8db; /* matches the shelf's paper tone — no white flash while loading */
+  }
+</style>
+</head>
+<body class="translations-page">
+
+  <header class="site-header">
+    <span class="header-left">ENGLISH &mdash; ARABIC</span>
+    <nav class="header-nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="translations.html" aria-current="page">Translations</a>
+      <a href="about.html">Contact me</a>
+    </nav>
+    <span class="header-right">
+      <a class="header-logo-link" href="index.html" aria-label="Nada Hodali &mdash; home">
+        <img class="header-logo" src="assets/nada-logo-colored.png" alt="Nada Hodali &mdash; Translations" width="358" height="132" />
+      </a>
+    </span>
+  </header>
+
+  <main>
+    <iframe
+      id="library-frame"
+      class="library-frame"
+      src="/translations/"
+      title="Translations library — an interactive 3D bookshelf"
+      loading="eager"
+      allow="fullscreen"
+    ></iframe>
+  </main>
+
+  <script>
+    // Deep link: index.html links book titles as translations.html?book=<id>.
+    // The shelf app has no URL routing, but it is same-origin, so we drive its
+    // DOM directly — click the matching catalog tick once the shelf is ready.
+    (function () {
+      // Catalog order as rendered by the shelf's "Browse to …" ticks.
+      var ORDER = [
+        "i-feel-fortunate",
+        "my-romantic-aunt",
+        "palestine-is-everywhere",
+        "30-seconds-from-gaza",
+        "a-novel-for-my-story-2",
+        "a-novel-for-my-story",
+        "the-shadow-of-hermaphroditus",
+        "the-journey-of-abbas",
+        "this-moment",
+        "safaa-and-the-tent"
+      ];
+
+      var wanted = new URLSearchParams(window.location.search).get("book");
+      if (!wanted) return;
+
+      var target = ORDER.indexOf(wanted);
+      if (target < 0) return;
+
+      var frame = document.getElementById("library-frame");
+      var deadline = Date.now() + 20000; // give the shelf up to 20s to boot
+      var clicks = 0;
+
+      function shelfDoc() {
+        try {
+          return frame.contentDocument;
+        } catch (e) {
+          return null; // cross-origin — nothing we can do
+        }
+      }
+
+      function ready(doc) {
+        // The shelf paints a full-screen loading screen until every volume is
+        // assembled; its onClick handlers only fire once that clears.
+        var loader = doc.querySelector(".loading-screen");
+        var loading = loader && loader.getAttribute("aria-hidden") !== "true";
+        var tick = doc.querySelectorAll(".shelf-index__ticks button")[target];
+        return !loading && tick ? tick : null;
+      }
+
+      function trySelect() {
+        if (Date.now() > deadline) return;
+
+        var doc = shelfDoc();
+        var tick = doc && ready(doc);
+        if (!tick) {
+          setTimeout(trySelect, 250);
+          return;
+        }
+
+        tick.click();
+        clicks++;
+
+        // browseTo() is idempotent; click a couple more times in case the very
+        // first one lands before the controller ref is wired up.
+        if (clicks < 3) {
+          setTimeout(trySelect, 400);
+          return;
+        }
+
+        // Then open the book's detail view once browsing settles.
+        setTimeout(function () {
+          var d = shelfDoc();
+          var inspect = d && d.querySelector('[data-testid="inspect-active"]');
+          if (inspect && !inspect.disabled) inspect.click();
+        }, 900);
+      }
+
+      frame.addEventListener("load", function () {
+        setTimeout(trySelect, 250);
+      });
+    })();
+  </script>
+
+</body>
+</html>
