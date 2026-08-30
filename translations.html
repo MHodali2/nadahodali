@@ -63,18 +63,21 @@
     // The shelf app has no URL routing, but it is same-origin, so we drive its
     // DOM directly — click the matching catalog tick once the shelf is ready.
     (function () {
-      // Catalog order as rendered by the shelf's "Browse to …" ticks.
+      // Left-to-right order of the shelf's "Browse to …" ticks. The shelf
+      // sorts its catalog by book height, so this is NOT the catalog file
+      // order — it was verified by opening each ?book= link against the live
+      // shelf. Re-check tick positions here whenever the shelf is re-exported.
       var ORDER = [
-        "i-feel-fortunate",
-        "my-romantic-aunt",
-        "palestine-is-everywhere",
-        "30-seconds-from-gaza",
-        "a-novel-for-my-story-2",
-        "a-novel-for-my-story",
-        "the-shadow-of-hermaphroditus",
-        "the-journey-of-abbas",
-        "this-moment",
-        "safaa-and-the-tent"
+        "this-moment",                  // 1
+        "i-feel-fortunate",             // 2
+        "30-seconds-from-gaza",         // 3
+        "a-novel-for-my-story-2",       // 4
+        "a-novel-for-my-story",         // 5
+        "the-shadow-of-hermaphroditus", // 6
+        "the-journey-of-abbas",         // 7
+        "my-romantic-aunt",             // 8
+        "palestine-is-everywhere",      // 9
+        "safaa-and-the-tent"            // 10
       ];
 
       var wanted = new URLSearchParams(window.location.search).get("book");

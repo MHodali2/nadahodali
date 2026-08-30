@@ -271,10 +271,7 @@ section {
   object-fit: cover;
   display: block;
   clip-path: inset(0 0 0 20px);
-  filter: grayscale(100%);
-  transition: filter 0.5s ease;
 }
-.hero-plate:hover img { filter: grayscale(0%); }
 
 /* sleek olive corner brackets, sitting just outside the image */
 .hero-plate::after {
