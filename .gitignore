@@ -1,1 +1,4 @@
 .DS_Store
+
+# Raw shelf export drop zone — contents get vendored into translations/ instead
+out/
