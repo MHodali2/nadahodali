@@ -11,7 +11,7 @@
   --line-soft: #D7D3C7;
 
   --sketch-ink:   #bcc819;           /* one confident hand — olive pen, matches the highlighter */
-  --sketch-hl:  hsla(64, 78%, 44%, 0.62); /* bright, saturated olive marker */
+  --sketch-hl:  lab(77.32% -22.72 74.5 / 0.62); /* bright, saturated olive marker */
 
   --font-serif: "Newsreader", Georgia, "Times New Roman", serif;
   --font-mono:  "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -22,7 +22,20 @@
 
 * { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-color: #5a6320 transparent;
+}
+
+/* dark, rich olive scrollbar */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: #5a6320;
+  border-radius: 999px;
+  border: 3px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover { background: #464e17; }
 
 body {
   margin: 0;
@@ -85,8 +98,14 @@ a { color: inherit; }
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   padding: 0 var(--pad);
-  background: var(--bg);
+  background: rgba(233, 230, 222, 0.62);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  backdrop-filter: blur(14px) saturate(140%);
   z-index: 40;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header { background: var(--bg); }
 }
 
 .header-left  { justify-self: start; color: var(--ink-soft); }
@@ -133,7 +152,13 @@ section {
   padding-bottom: clamp(5rem, 14vh, 11rem);
 }
 
-.hero { padding-top: calc(var(--header-h) + clamp(3rem, 10vh, 7rem)); }
+.hero {
+  padding-top: calc(var(--header-h) + clamp(3rem, 10vh, 7rem));
+  padding-bottom: clamp(2rem, 6vh, 4rem);
+}
+
+/* Tighten the gap between the hero meta and Selected Translations */
+.works { padding-top: clamp(2.5rem, 7vh, 5rem); }
 
 /* ============================================================
    Hero
@@ -315,6 +340,200 @@ section {
 .hero-meta dd { margin: 0; font-size: 1.125rem; }
 
 /* ============================================================
+   Hero showcase — case study card beside the portrait
+   ============================================================ */
+.hero-showcase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) min(46%, 640px);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: end;
+  margin: clamp(3rem, 9vw, 7rem) 0 0;
+}
+
+/* the portrait keeps its bracketed plate, just no longer floats itself right */
+.hero-showcase .hero-plate {
+  width: 100%;
+  margin: 0;
+}
+
+/* while the case-study pair is hidden, let the portrait float right as it did before */
+.hero-showcase:not(:has(.case-study-pair)) {
+  display: block;
+}
+@media (min-width: 901px) {
+  .hero-showcase:not(:has(.case-study-pair)) .hero-plate {
+    width: min(46%, 640px);
+    margin: 0 0 0 auto;
+  }
+}
+
+/* two compact case-study cards sitting side by side */
+.case-study-pair {
+  align-self: end;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.2vw, 1.75rem);
+  isolation: isolate;
+}
+
+.case-study { margin: 0; align-self: end; max-width: 23rem; }
+.case-study-pair .case-study {
+  max-width: none;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.case-study-pair .case-card { flex: 1; }
+
+.cs-eyebrow {
+  margin: 0 0 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.case-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #F3F0E8;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px;
+}
+
+.case-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: clamp(0.75rem, 1.6vw, 1rem);
+  border-radius: 9px;
+  position: relative;
+  background-color: transparent;
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.22s ease,
+    opacity 0.3s ease;
+}
+.case-card-head::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: clamp(0.75rem, 1.6vw, 1rem);
+  right: clamp(0.75rem, 1.6vw, 1rem);
+  border-top: 1px solid var(--line);
+  opacity: 1;
+  transition: opacity 0.22s ease;
+}
+
+.case-card-title {
+  margin: 0;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.15;
+}
+
+.case-card-byline {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.case-card-tag {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.case-card-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.case-col {
+  padding: clamp(0.75rem, 1.6vw, 1rem);
+  border-radius: 9px;
+  position: relative;
+  background-color: transparent;
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.22s ease,
+    opacity 0.3s ease;
+}
+.case-col + .case-col::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: clamp(0.75rem, 1.6vw, 1rem);
+  right: clamp(0.75rem, 1.6vw, 1rem);
+  border-top: 1px solid var(--line);
+  opacity: 1;
+  transition: opacity 0.22s ease;
+}
+
+/* hover any section — title or a passage — to bring it forward and settle the eye */
+@media (hover: hover) and (pointer: fine) {
+  .case-study-pair .case-study:hover { z-index: 2; }
+
+  .case-card:hover .case-card-head:not(:hover),
+  .case-card:hover .case-col:not(:hover) { opacity: 0.4; }
+
+  .case-card-head:hover,
+  .case-card-body .case-col:hover {
+    transform: translateY(-4px) scale(1.02);
+    background-color: #FCFBF7;
+    box-shadow: 0 12px 26px -12px rgba(28, 27, 24, 0.3);
+    z-index: 1;
+  }
+  .case-card:hover .case-card-head::after,
+  .case-card:hover .case-col + .case-col::before { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-card-head,
+  .case-col { transition-duration: 0.01ms; }
+  .case-card-head:hover,
+  .case-card-body .case-col:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.case-col-label {
+  margin: 0 0 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+.case-passage {
+  margin: 0;
+  font-size: clamp(0.9rem, 1.05vw, 1rem);
+  line-height: 1.32;
+}
+
+.case-passage[dir="rtl"] { text-align: right; }
+
+/* ============================================================
    Placeholder blocks (stand in for images)
    ============================================================ */
 .placeholder {
@@ -374,12 +593,73 @@ section {
 }
 
 .work-row {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: 5.5rem minmax(0, 1fr) 10rem 12rem;
   align-items: baseline;
   gap: 1.5rem;
   padding: clamp(1.75rem, 4vw, 2.75rem) 0;
   border-bottom: 1px solid var(--line);
+  transition: border-color 0.45s ease;
+}
+
+/* full-bleed wash that eases in behind the row on hover */
+.work-row::before {
+  content: "";
+  position: absolute;
+  inset: 0 calc(-1 * var(--pad));
+  z-index: -1;
+  background: var(--line-soft);
+  opacity: 0;
+  transform: scaleY(0.72);
+  transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.work-row > * {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              color 0.45s ease;
+}
+
+@media (hover: hover) {
+  .work-row:hover {
+    border-color: var(--ink);
+  }
+
+  .work-row:hover::before {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  .work-row:hover .work-index {
+    color: var(--ink);
+  }
+
+  .work-row:hover .work-title,
+  .work-row:hover .work-scope,
+  .work-row:hover .work-venue {
+    transform: translateX(0.4rem);
+  }
+
+  .work-row:hover .work-index {
+    transform: translateX(0.2rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work-row,
+  .work-row::before,
+  .work-row > * {
+    transition-duration: 0.01ms;
+  }
+
+  .work-row:hover .work-title,
+  .work-row:hover .work-scope,
+  .work-row:hover .work-venue,
+  .work-row:hover .work-index {
+    transform: none;
+  }
 }
 
 .work-index { color: var(--ink-soft); }
@@ -411,6 +691,61 @@ section {
 .work-title-link:hover,
 .work-title-link:focus-visible {
   opacity: 0.62;
+}
+
+/* ============================================================
+   Writing — book reviews (Selected Translations layout + cover art)
+   ============================================================ */
+.review-row {
+  /* index · cover · title/author · outlet · date */
+  grid-template-columns: 5.5rem 4.75rem minmax(0, 1fr) 10rem 8rem;
+  align-items: center;
+}
+
+.review-cover {
+  display: block;
+  width: 4.75rem;
+  aspect-ratio: 3 / 4;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--line-soft);
+}
+
+.review-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%);
+  transition: filter 0.5s ease,
+              transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* diagonal hatch stand-in until real cover art is dropped in */
+.review-cover--empty {
+  background-image:
+    linear-gradient(45deg, transparent calc(50% - 0.5px), var(--line-soft) 50%, transparent calc(50% + 0.5px)),
+    linear-gradient(-45deg, transparent calc(50% - 0.5px), var(--line-soft) 50%, transparent calc(50% + 0.5px));
+  background-color: #F3F0E8;
+}
+
+@media (hover: hover) {
+  .review-row:hover .review-cover img {
+    filter: grayscale(0%);
+    transform: scale(1.04);
+  }
+  .review-row:hover .review-cover {
+    transform: translateX(0.4rem);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .review-cover,
+  .review-cover img { transition-duration: 0.01ms; }
+  .review-row:hover .review-cover,
+  .review-row:hover .review-cover img { transform: none; }
 }
 
 /* ============================================================
@@ -692,14 +1027,44 @@ section {
   .hero-statement { max-width: none; }
   .hero-plate { width: 100%; margin-left: 0; }
 
-  .section-head { flex-direction: column; gap: 1.5rem; }
-  .section-range { text-align: left; }
+  .hero-showcase { grid-template-columns: 1fr; gap: 2.5rem; }
+  .case-study { max-width: none; }
+  .case-study-pair { gap: 1.5rem; }
+
+  /* stack the meta list so the long lines wrap instead of scrolling sideways */
+  .hero-meta {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: clamp(2rem, 9vw, 3rem);
+  }
+  .hero-meta dd { font-size: 1.0625rem; }
+
+  /* keep the range on the right, level with the title — no stacked gap */
+  .section-head { gap: 1rem; }
 
   .work-row {
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
   .work-venue { text-align: left; }
+
+  /* reviews: cover pinned left, the rest of the row stacked beside it */
+  .review-row {
+    grid-template-columns: 4.75rem minmax(0, 1fr);
+    grid-template-areas:
+      "index index"
+      "cover title"
+      "cover scope"
+      "cover venue";
+    column-gap: 1.25rem;
+    row-gap: 0.5rem;
+    align-items: start;
+  }
+  .review-row .work-index { grid-area: index; }
+  .review-row .review-cover { grid-area: cover; align-self: start; }
+  .review-row .work-title { grid-area: title; }
+  .review-row .work-scope { grid-area: scope; }
+  .review-row .work-venue { grid-area: venue; }
 
   .feature-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .feature-text { padding-top: 0; }
@@ -716,4 +1081,24 @@ section {
   }
   .footer-contact { text-align: left; }
   .footer-card { align-self: flex-start; }
+}
+
+@media (max-width: 560px) {
+  /* trim the very tall section rhythm so phones aren't mostly whitespace */
+  section {
+    padding-top: clamp(3.5rem, 11vw, 6rem);
+    padding-bottom: clamp(3.5rem, 11vw, 6rem);
+  }
+
+  /* let the title and its tag stack instead of pinching on one line */
+  .case-card-head { flex-wrap: wrap; }
+  .case-card-tag { flex-basis: 100%; }
+
+  /* stack the two case studies once the row gets too tight */
+  .case-study-pair { grid-template-columns: 1fr; }
+
+  .work-title { font-size: clamp(1.4rem, 6.5vw, 1.9rem); }
+  .work-author { margin-top: 0.4rem; }
+
+  .footer-name { font-size: clamp(1.6rem, 8vw, 2.2rem); }
 }

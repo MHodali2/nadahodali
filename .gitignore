@@ -2,3 +2,6 @@
 
 # Raw shelf export drop zone — contents get vendored into translations/ instead
 out/
+
+# Local maintenance notes, not part of the deployed site
+UPDATING-THE-SHELF.md

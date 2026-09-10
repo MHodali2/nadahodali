@@ -4,10 +4,11 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Nada Hodali — English–Arabic Translator</title>
+<link rel="icon" type="image/png" href="assets/leaf.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=18" />
+<link rel="stylesheet" href="styles.css?v=24" />
 <script src="sketch.js?v=7" defer></script>
 </head>
 <body>
@@ -19,6 +20,7 @@
     <nav class="header-nav" aria-label="Primary">
       <a href="index.html" aria-current="page">Home</a>
       <a href="translations.html">Translations</a>
+      <a href="writing.html">Writing</a>
       <a href="about.html">Contact me</a>
     </nav>
     <span class="header-right">
@@ -41,9 +43,81 @@
         <span class="sketch--highlight" data-sketch="highlight">art of translation.</span>
       </h1>
 
-      <figure class="hero-plate">
-        <img src="assets/nada-picture.jpeg" alt="Nada Hodali at university" />
-      </figure>
+      <div class="hero-showcase">
+        <!-- Case study blocks hidden for now — restore by removing this comment wrapper.
+        <div class="case-study-pair">
+          <aside class="case-study" aria-labelledby="cs-title">
+            <p class="cs-eyebrow">Case Study &mdash; No. 01</p>
+
+            <article class="case-card">
+              <header class="case-card-head">
+                <div class="case-card-id">
+                  <h2 class="case-card-title" id="cs-title">I FEEL FORTUNATE</h2>
+                  <p class="case-card-byline">Author: Dania Al-Omari / Publisher: FIKRA Magazine</p>
+                </div>
+                <span class="case-card-tag">01 &mdash; Story</span>
+              </header>
+
+              <div class="case-card-body">
+                <div class="case-col">
+                  <p class="case-col-label">Original (AR)</p>
+                  <p class="case-passage" lang="ar" dir="rtl">
+                    نصٌّ عربيٌّ مؤقّتٌ يوضَع هنا ريثما يُستبدَل بمقطعٍ حقيقيٍّ؛
+                    <span class="sketch" data-sketch="underline">الجملة</span>
+                    تتنفّس في زوايا لم ننتبه إليها.
+                  </p>
+                </div>
+                <div class="case-col">
+                  <p class="case-col-label">Translation (EN)</p>
+                  <p class="case-passage">
+                    Despite feeling relatively fortunate, I still feel the impact of the occupation on everything I do in life. I constantly
+                    <span class="sketch" data-sketch="underline">wonder: </span>
+                    'What would life be like without an occupation?'
+                  </p>
+                </div>
+              </div>
+            </article>
+          </aside>
+
+          <aside class="case-study" aria-labelledby="cs-title-2">
+            <p class="cs-eyebrow">Case Study &mdash; No. 02</p>
+
+            <article class="case-card">
+              <header class="case-card-head">
+                <div class="case-card-id">
+                  <h2 class="case-card-title" id="cs-title-2">A Novel for My Story</h2>
+                  <p class="case-card-byline">Author: Sahar Khalifeh / Publisher: Mousse Magazine</p>
+                </div>
+                <span class="case-card-tag">02 &mdash; Novel</span>
+              </header>
+
+              <div class="case-card-body">
+                <div class="case-col">
+                  <p class="case-col-label">Original (AR)</p>
+                  <p class="case-passage" lang="ar" dir="rtl">
+                    نصٌّ عربيٌّ مؤقّتٌ ينتظر هنا ريثما يصل المقطع الحقيقيّ؛
+                    <span class="sketch" data-sketch="underline">السطر</span>
+                    ينعطف حيث لا نتوقّع الضوء.
+                  </p>
+                </div>
+                <div class="case-col">
+                  <p class="case-col-label">Translation (EN)</p>
+                  <p class="case-passage">
+                    ecause I wanted to reveal secrets. I wanted to reveal my secrets as an oppressed
+                    <span class="sketch" data-sketch="underline">Arab woman</span>
+                    and the secret behind each novel. I wanted to teach and let others learn.
+                  </p>
+                </div>
+              </div>
+            </article>
+          </aside>
+        </div>
+        -->
+
+        <figure class="hero-plate">
+          <img src="assets/nada-picture.jpeg" alt="Nada Hodali at university" />
+        </figure>
+      </div>
 
       <dl class="hero-meta">
         <div>
@@ -87,7 +161,7 @@
           <span class="work-venue">ANMLY</span>
         </li>
         <li class="work-row">
-          <span class="work-index">No. 03 <span class="sketch-doodle" data-sketch="star" data-accent aria-hidden="true"></span></span>
+          <span class="work-index">No. 03 </span>
           <span class="work-title"><a class="work-title-link" href="translations.html?book=my-romantic-aunt">My Romantic Aunt</a>
             <span class="work-author">Najem Wali</span>
           </span>
@@ -103,7 +177,7 @@
           <span class="work-venue"><span class="sketch--highlight" data-sketch="highlight">Mousse Magazine</span></span>
         </li>
         <li class="work-row">
-          <span class="work-index">No. 05</span>
+          <span class="work-index">No. 05 <span class="sketch-doodle" data-sketch="star" data-accent aria-hidden="true"></span></span>
           <span class="work-title"><a class="work-title-link" href="translations.html?book=30-seconds-from-gaza"><span class="sketch" data-sketch="underline">30 Seconds from Gaza</span></a>
             <span class="work-author">Mohammad Sabaaneh</span>
           </span>
@@ -151,6 +225,9 @@
       <p class="footer-name"><span class="sketch" data-sketch="underline">Nada</span><span class="sketch" data-sketch="underline"> Hodali</span></p>
       <p class="footer-rights">All rights reserved &copy; 2026</p>
     </div>
+    <figure class="footer-card">
+      <img src="assets/business card nada no background.png" alt="Nada Hodali &mdash; business card" />
+    </figure>
     <div class="footer-contact">
       <p class="footer-kicker"><a href="about.html">Inquiries</a></p>
       <p class="footer-email"><a href="mailto:nadahodali@hotmail.com">nadahodali@hotmail.com</a></p>
