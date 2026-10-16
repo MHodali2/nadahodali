@@ -41,7 +41,7 @@
         <div class="contact-intro">
           <p class="contact-lead">
             For translation commissions, sample excerpts, workshops, or
-            <span class="sketch" data-sketch="underline">rights inquiries</span> &mdash;
+            <span class="sketch" data-sketch="underline">rights inquiries</span>;
             send a note below and I&rsquo;ll reply by email.
           </p>
           <dl class="contact-meta">
@@ -144,7 +144,7 @@
           .then(function (data) {
             if (data.success) {
               form.reset();
-              setStatus("Thank you — your message is on its way. I’ll be in touch soon.", false);
+              setStatus("Thank you; your message is on its way. I’ll be in touch soon.", false);
             } else {
               setStatus(data.message || "Something went wrong. Please email me directly at nadahodali@hotmail.com.", true);
             }

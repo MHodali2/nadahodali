@@ -65,30 +65,32 @@
     // The shelf app has no URL routing, but it is same-origin, so we drive its
     // DOM directly — click the matching catalog tick once the shelf is ready.
     (function () {
-      // Left-to-right order of the shelf's "Browse to …" ticks. The shelf
-      // sorts its catalog by book height, so this is NOT the catalog file
-      // order — it was verified by opening each ?book= link against the live
-      // shelf. Re-check tick positions here whenever the shelf is re-exported.
-      var ORDER = [
-        "this-moment",                  // 1
-        "i-feel-fortunate",             // 2
-        "30-seconds-from-gaza",         // 3
-        "stolen-sold",                  // 4
-        "a-novel-for-my-story-2",       // 5
-        "a-novel-for-my-story",         // 6
-        "the-shadow-of-hermaphroditus", // 7
-        "the-journey-of-abbas",         // 8
-        "my-romantic-aunt",             // 9
-        "beyond-the-steppe",            // 10
-        "palestine-is-everywhere",      // 11
-        "safaa-and-the-tent"            // 12
-      ];
+      // slug -> the book's exact catalog `title`. The shelf labels each tick
+      // "Browse to <title>", so we find the tick by label instead of by
+      // position and never depend on the shelf's sort order. Copy a new book's
+      // title verbatim from the catalog when adding a link.
+      var TITLES = {
+        "this-moment": "This Moment",
+        "i-feel-fortunate": "I FEEL FORTUNATE",
+        "30-seconds-from-gaza": "30 Seconds from Gaza",
+        "stolen-sold": "Stolen, Sold and Left to Rot",
+        "behind-the-walls": "Behind the Walls",
+        "a-novel-for-my-story-2": "A Novel for My Story (from \u201cPalestine Is Everywhere\u201d, published in Mousse Fall 25 Edition by Mousse Magazine.",
+        "a-novel-for-my-story": "A Novel for My Story",
+        "the-shadow-of-hermaphroditus": "THE SHADOW OF HERMAPHRODITUS",
+        "the-journey-of-abbas": "The Journey of Abbas Hilmi Pasha II, Khedive of Egypt, to the Hijaz",
+        "my-romantic-aunt": "My Romantic Aunt",
+        "beyond-the-steppe": "Beyond the Steppe",
+        "palestine-is-everywhere": "Palestine Is Everywhere",
+        "safaa-and-the-tent": "Safaa and the Tent"
+      };
 
       var wanted = new URLSearchParams(window.location.search).get("book");
       if (!wanted) return;
 
-      var target = ORDER.indexOf(wanted);
-      if (target < 0) return;
+      var wantedLabel = TITLES[wanted];
+      if (!wantedLabel) return;
+      wantedLabel = "Browse to " + wantedLabel;
 
       var frame = document.getElementById("library-frame");
       var deadline = Date.now() + 20000; // give the shelf up to 20s to boot
@@ -107,7 +109,11 @@
         // assembled; its onClick handlers only fire once that clears.
         var loader = doc.querySelector(".loading-screen");
         var loading = loader && loader.getAttribute("aria-hidden") !== "true";
-        var tick = doc.querySelectorAll(".shelf-index__ticks button")[target];
+        var ticks = doc.querySelectorAll(".shelf-index__ticks button");
+        var tick = null;
+        for (var i = 0; i < ticks.length; i++) {
+          if (ticks[i].getAttribute("aria-label") === wantedLabel) tick = ticks[i];
+        }
         return !loading && tick ? tick : null;
       }
 
